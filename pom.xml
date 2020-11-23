@@ -19,6 +19,9 @@
 		<java.version>11</java.version>
 		<ecache.version>3.0.0</ecache.version>
 		<springboot.version>2.3.5.RELEASE</springboot.version>
+		<sonar.projectKey>lmartinez63_springbootweb</sonar.projectKey>
+		<sonar.organization>lmartinez63</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>

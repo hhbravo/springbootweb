@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <context:component-scan base-package="com.landl.hcare.component" />
+
+    <!-- For times when you need more complex processing, passing data to the scheduled job -->
+    <bean name="emailJobDetail"    class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="org.example.springbootweb.quartz.EmailJob" />
+        <property name="jobDataMap">
+            <map>
+                <entry key="verifyEmail" value-ref="verifyEmail" />
+            </map>
+        </property>
+        <property name="durability" value="true" />
+    </bean>
+    <bean id="cronEmailTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="emailJobDetail" />
+        <!--<property name="cronExpression" value="0/5 * * ? * SAT-SUN" />-->
+        <property name="cronExpression" value="0 * * * * ?" />
+    </bean>
+    <!-- Scheduler factory bean to glue together jobDetails and triggers to Configure Quartz Scheduler -->
+    <bean  class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="emailJobDetail" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="cronEmailTrigger" />
+            </list>
+        </property>
+    </bean>
+
+</beans>
